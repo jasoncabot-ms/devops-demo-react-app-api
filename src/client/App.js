@@ -1,9 +1,25 @@
 import React, { Component } from 'react';
+import { ApplicationInsights } from '@microsoft/applicationinsights-web';
+import { ReactPlugin, withAITracking } from '@microsoft/applicationinsights-react-js';
+import { createBrowserHistory } from "history";
 import './app.css';
 import ReactImage from './react.png';
 
-export default class App extends Component {
-  state = { username: null };
+const browserHistory = createBrowserHistory({ basename: '' });
+var reactPlugin = new ReactPlugin();
+var appInsights = new ApplicationInsights({
+  config: {
+    instrumentationKey: 'f0c70f53-d039-44ee-8771-55fe7207e80d',
+    extensions: [reactPlugin],
+    extensionConfig: {
+      [reactPlugin.identifier]: { history: browserHistory }
+    }
+  }
+});
+appInsights.loadAppInsights();
+
+class App extends Component {
+  state = { message: null };
 
   componentDidMount() {
     fetch('/api/message')
@@ -21,3 +37,5 @@ export default class App extends Component {
     );
   }
 }
+
+export default withAITracking(reactPlugin, App);
