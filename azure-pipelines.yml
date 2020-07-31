@@ -14,9 +14,6 @@ variables:
   # Web app name
   webAppName: 'devopsdemo-simpleapp'
   
-  # Environment name
-  environmentName: 'Production'
-
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
@@ -42,14 +39,14 @@ stages:
     - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
 
-- stage: Deploy
-  displayName: Deploy stage
+- stage: DeployDev
+  displayName: Deploy Dev
   dependsOn: Build
   condition: succeeded()
   jobs:
   - deployment: Deploy
     displayName: Deploy
-    environment: $(environmentName)
+    environment: Development
     pool: 
       vmImage: $(vmImageName)
     strategy:
@@ -57,11 +54,67 @@ stages:
         deploy:
           steps:            
           - task: AzureRmWebAppDeployment@4
-            displayName: 'Azure App Service Deploy: devopsdemo-simpleapp'
+            displayName: 'App Service - Development'
             inputs:
               azureSubscription: $(azureSubscription)
               appType: webAppLinux
-              WebAppName: $(webAppName)
+              WebAppName: $(webAppName)-dev
+              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+              RuntimeStack: 'NODE|10.10'
+              StartupCommand: 'npm run start'
+              ScriptType: 'Inline Script'
+              InlineScript: |
+                npm install
+                npm run build --if-present
+
+- stage: DeployStaging
+  displayName: Deploy Staging
+  dependsOn: DeployDev
+  condition: succeeded()
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: Staging
+    pool: 
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:            
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'App Service - Staging'
+            inputs:
+              azureSubscription: $(azureSubscription)
+              appType: webAppLinux
+              WebAppName: $(webAppName)-staging
+              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+              RuntimeStack: 'NODE|10.10'
+              StartupCommand: 'npm run start'
+              ScriptType: 'Inline Script'
+              InlineScript: |
+                npm install
+                npm run build --if-present
+
+- stage: DeployProduction
+  displayName: Deploy Production
+  dependsOn: DeployStaging
+  condition: succeeded()
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: Production
+    pool: 
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:            
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'App Service - Production'
+            inputs:
+              azureSubscription: $(azureSubscription)
+              appType: webAppLinux
+              WebAppName: $(webAppName)-prod
               packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
               RuntimeStack: 'NODE|10.10'
               StartupCommand: 'npm run start'
