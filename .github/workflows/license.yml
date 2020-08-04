@@ -19,7 +19,7 @@ on:
       - package-lock.json
 
 jobs:
-  build:
+  license_check:
     runs-on: ubuntu-latest
 
     steps:
@@ -40,6 +40,35 @@ jobs:
         
     - name: Run license check
       id: licensed 
-      run: licensed status -c .licensed.yml
+      run: |
+        # Cache and check licenses
+        licensed cache
 
-      
+        # Run command and grab exit code + output
+        RESULT="$(licensed status -c .licensed.yml)"
+        CODE=$?
+
+        # Allow multi-line strings in output
+        RESULT="${RESULT//'%'/'%25'}"
+        RESULT="${RESULT//$'\n'/'%0A'}"
+        RESULT="${RESULT//$'\r'/'%0D'}"
+        echo "::set-output name=status::$RESULT"
+
+        # This is the real exit code from the license check
+        exit $CODE
+      shell: bash --noprofile --norc -o pipefail {0}
+
+    - name: Report back on PR
+      if: ${{ failure() && github.event_name == 'pull_request' }}
+      uses: actions/github-script@0.2.0
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const output = process.env.LICENSED_OUTPUT;
+          github.issues.createComment({
+            ...context.repo,
+            issue_number: context.payload.number,
+            body: output
+          })
+      env:
+        LICENSED_OUTPUT: ${{ steps.licensed.outputs.status }}
