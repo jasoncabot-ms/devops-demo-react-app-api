@@ -20,7 +20,6 @@ jobs:
     - name: Set up license checker
       uses: jonabc/setup-licensed@v1
       with:
-        config_file: .licensed.yml
         version: 2.x
         
     - name: Set up Node.js version
