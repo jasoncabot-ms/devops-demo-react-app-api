@@ -16,6 +16,7 @@ jobs:
     - name: Set up license checker
       uses: jonabc/setup-licensed@v1
       with:
+        config_file: .licensed.yml
         version: 2.x
         
     - name: Set up Node.js version
@@ -28,7 +29,6 @@ jobs:
         
     - name: Run license check
       id: licensed 
-      run: licensed status
-      with:
-        config_file: .licensed.yml
+      run: licensed status -c .licensed.yml
+
       
