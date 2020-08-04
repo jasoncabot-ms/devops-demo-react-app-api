@@ -7,6 +7,11 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'package.json'
+      - 'webpack.config.js'
+      - 'src/**'
+      - '.github/workflows/master_devopsdemo-simpleapp.yml'
 
 jobs:
   build-and-deploy:
