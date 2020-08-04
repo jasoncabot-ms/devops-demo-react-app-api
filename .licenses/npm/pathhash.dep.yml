@@ -1,0 +1,9 @@
+---
+name: pathhash
+version: 1.0.0
+type: npm
+summary: get the hash of a file at a given path
+homepage: https://github.com/nisaacson/pathhash#readme
+license: other
+licenses: []
+notices: []
