@@ -10,3 +10,4 @@ Main features that it demonstrates:
 * Azure App Service
 * Security Updates
 * Insights Dependency Graph
+* License Scanning
