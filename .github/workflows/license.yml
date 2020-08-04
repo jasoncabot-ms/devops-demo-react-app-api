@@ -10,6 +10,13 @@ on:
       - .licensed.yml
       - package.json
       - package-lock.json
+  pull_request:
+    branches: [ master ]
+    paths: 
+      - .github/workflows/license.yml
+      - .licensed.yml
+      - package.json
+      - package-lock.json
 
 jobs:
   build:
