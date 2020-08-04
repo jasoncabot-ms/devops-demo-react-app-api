@@ -5,6 +5,10 @@ name: License Check
 on:
   push:
     branches: [ master ]
+    paths: 
+      - .github/workflows/license.yml
+      - package.json
+      - package-lock.json
 
 jobs:
   build:
