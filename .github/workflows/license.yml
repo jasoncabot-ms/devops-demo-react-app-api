@@ -51,5 +51,5 @@ jobs:
           github.issues.createComment({
             ...context.repo,
             issue_number: context.payload.number,
-            body: ${{ steps.licensed.outputs.result }}
+            body: steps.licensed.outputs.result
           })
