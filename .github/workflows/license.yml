@@ -50,6 +50,6 @@ jobs:
         script: |
           github.issues.createComment({
             ...context.repo,
-            issue_number: context.payload.number
+            issue_number: context.payload.number,
             body: ${{ steps.licensed.outputs.result }}
           })
