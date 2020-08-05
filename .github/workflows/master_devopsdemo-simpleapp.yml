@@ -6,7 +6,7 @@ name: Build and deploy Node.js app to Azure Web App - devopsdemo-simpleapp
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'package.json'
       - 'webpack.config.js'

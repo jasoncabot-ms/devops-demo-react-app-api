@@ -4,14 +4,14 @@ name: License Check
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths: 
       - .github/workflows/license.yml
       - .licensed.yml
       - package.json
       - package-lock.json
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
     paths: 
       - .github/workflows/license.yml
       - .licensed.yml
