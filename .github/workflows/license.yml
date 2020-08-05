@@ -20,6 +20,9 @@ on:
 
 jobs:
   license_check:
+    strategy:
+      fail-fast: false
+
     runs-on: ubuntu-latest
 
     steps:
