@@ -42,6 +42,9 @@ jobs:
       id: licensed 
       run: |
         RESULT=$(licensed status -c .licensed.yml)
+        RESULT="${RESULT//'%'/'%25'}"
+        RESULT="${RESULT//$'\n'/'%0A'}"
+        RESULT="${RESULT//$'\r'/'%0D'}"
         CODE=$?
         echo "::set-output name=status::$RESULT"
         exit $CODE
