@@ -20,9 +20,6 @@ on:
 
 jobs:
   license_check:
-    strategy:
-      fail-fast: false
-
     runs-on: ubuntu-latest
 
     steps:
@@ -46,9 +43,9 @@ jobs:
       run: |
         RESULT=$(licensed status -c .licensed.yml)
         CODE=$?
-        echo "Result is $RESULT"
-        echo "::set-output name=status::$RESULT\n"
+        echo "::set-output name=status::$RESULT"
         exit $CODE
+      shell: bash --noprofile --norc -o pipefail {0}
 
     - name: Report back on PR
       if: ${{ failure() && github.event_name == 'pull_request' }}
