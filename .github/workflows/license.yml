@@ -40,6 +40,6 @@ jobs:
         
     - name: Run license check
       id: licensed 
-      run: licensed list -c .licensed.yml
+      run: licensed status -c .licensed.yml
 
       
