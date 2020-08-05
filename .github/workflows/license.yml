@@ -19,7 +19,7 @@ on:
       - package-lock.json
 
 jobs:
-  build:
+  license_check:
     runs-on: ubuntu-latest
 
     steps:
