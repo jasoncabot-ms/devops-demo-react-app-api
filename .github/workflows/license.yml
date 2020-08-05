@@ -41,7 +41,10 @@ jobs:
     - name: Run license check
       id: licensed 
       run: |
-        echo "::set-output name=status::$(licensed status -c .licensed.yml)\n"
+        RESULT=$(licensed status -c .licensed.yml)
+        CODE=$?
+        echo "::set-output name=status::$($RESULT)\n"
+        exit $CODE
 
     - name: Report back on PR
       if: ${{ failure() && github.event_name == 'pull_request' }}
