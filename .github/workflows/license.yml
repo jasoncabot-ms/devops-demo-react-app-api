@@ -48,8 +48,11 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
+          const output = process.env.LICENSED_OUTPUT;
           github.issues.createComment({
             ...context.repo,
             issue_number: context.payload.number,
-            body: "Test comment on PR"
+            body: output
           })
+      env:
+        LICENSED_OUTPUT: ${{ steps.licensed.outputs.result }}
