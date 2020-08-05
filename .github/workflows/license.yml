@@ -43,7 +43,8 @@ jobs:
       run: |
         RESULT=$(licensed status -c .licensed.yml)
         CODE=$?
-        echo "::set-output name=status::$($RESULT)\n"
+        echo "Result is $RESULT"
+        echo "::set-output name=status::$RESULT\n"
         exit $CODE
 
     - name: Report back on PR
