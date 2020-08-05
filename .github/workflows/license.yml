@@ -41,12 +41,16 @@ jobs:
     - name: Run license check
       id: licensed 
       run: |
-        RESULT=$(licensed status -c .licensed.yml)
+        # Run command and grab exit code + output
+        RESULT="$(licensed status -c .licensed.yml)"
+        CODE=$?
+        # Allow multi-line strings in output
         RESULT="${RESULT//'%'/'%25'}"
         RESULT="${RESULT//$'\n'/'%0A'}"
         RESULT="${RESULT//$'\r'/'%0D'}"
-        CODE=$?
         echo "::set-output name=status::$RESULT"
+
+        # This is the real exit code from the license check
         exit $CODE
       shell: bash --noprofile --norc -o pipefail {0}
 
